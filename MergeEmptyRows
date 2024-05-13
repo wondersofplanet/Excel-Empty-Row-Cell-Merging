@@ -1,0 +1,26 @@
+Sub MergeEmptyRows()
+    Dim lastRow As Long, lastCol As Long
+    Dim i As Long, j As Long, mergeCount As Long
+    
+    ' Find the last row and last column with data
+    lastRow = ActiveSheet.Cells(Rows.Count, "A").End(xlUp).Row
+    lastCol = ActiveSheet.Cells(1, Columns.Count).End(xlToLeft).Column
+    
+    ' Loop through each row
+    For i = lastRow To 2 Step -1
+        mergeCount = 0
+        
+        ' Count the number of cells with data in the current row
+        For j = 1 To lastCol
+            If Cells(i, j).Value <> "" Then
+                mergeCount = mergeCount + 1
+            End If
+        Next j
+        
+        ' If the current row has less cells with data than the previous row, merge the cells
+        If mergeCount < lastCol Then
+            Range(Cells(i, 1), Cells(i, lastCol)).Merge
+            Cells(i, 1).HorizontalAlignment = xlCenter
+        End If
+    Next i
+End Sub
